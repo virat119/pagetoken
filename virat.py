@@ -55,54 +55,41 @@ button {
     cursor: pointer;
     background: #4f46e5;
     color: #fff;
+    transition: 0.3s;
 }
 button:hover { background: #4338ca; }
 
 .table-container {
     width: 95%;
     margin: 20px auto;
-    overflow-x: auto;
 }
-table {
-    width: 100%;
-    border-collapse: collapse;
+.page-card {
     background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    word-break: break-word;
+    transition: 0.3s;
 }
-th, td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    font-size: 14px;
-    text-align: left;
-    vertical-align: middle;
+.page-card:hover {
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
 }
-th {
-    background: linear-gradient(to right,#6366f1,#9333ea);
-    color: #fff;
-}
-tr:nth-child(even) { background: #f9f9ff; }
-
-/* Page Name & ID single line */
-.name-id, .copy-cell {
-    white-space: nowrap;
-    display: inline-block;
-    vertical-align: middle;
+.page-card div {
+    margin: 5px 0;
 }
 
-/* Token multi-line wrap */
+/* Token full wrap */
 .token-box {
-    display: block;
     background: #f3f4f6;
     padding: 6px 8px;
     border-radius: 6px;
     font-size: 12px;
-    width: 100%;
-    white-space: pre-wrap; /* preserve line breaks */
-    word-wrap: break-word;
+    white-space: pre-wrap; 
+    word-break: break-word;
 }
 
+/* Copy button */
 .copy-btn {
     background: #22c55e;
     color: #fff;
@@ -111,8 +98,32 @@ tr:nth-child(even) { background: #f9f9ff; }
     border-radius: 6px;
     cursor: pointer;
     font-size: 12px;
+    transition: 0.3s;
 }
 .copy-btn:hover { background: #16a34a; }
+
+/* Toast notification */
+.toast {
+    visibility: hidden;
+    min-width: 200px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: fixed;
+    z-index: 1;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.5s, visibility 0.5s;
+}
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+}
 
 footer {
     margin-top: 30px;
@@ -132,7 +143,6 @@ footer {
 
 @media(max-width:600px){
     h1 { font-size: 18px; }
-    table, th, td { font-size: 12px; }
     .token-box { font-size: 10px; }
     button { width: 100%; margin-top: 5px; }
 }
@@ -154,26 +164,18 @@ footer {
 
 {% if pages %}
 <div class="table-container">
-<table>
-<tr>
-<th>#</th>
-<th>Page Name</th>
-<th>Page ID</th>
-<th>Access Token</th>
-<th>Copy</th>
-</tr>
 {% for p in pages %}
-<tr>
-<td>{{ loop.index }}</td>
-<td class="name-id" style="color:#4f46e5;"><b>{{ p.name }}</b></td>
-<td class="name-id" style="color:#9333ea;">{{ p.id }}</td>
-<td><div class="token-box" id="token{{ loop.index }}">{{ p.access_token }}</div></td>
-<td class="copy-cell"><button class="copy-btn" onclick="copyToken('token{{ loop.index }}')">Copy</button></td>
-</tr>
+<div class="page-card">
+    <div style="color:#4f46e5;"><b>Page Name:</b> {{ p.name }}</div>
+    <div style="color:#9333ea;"><b>Page ID:</b> {{ p.id }}</div>
+    <div class="token-box" id="token{{ loop.index }}"><b>Access Token:</b> {{ p.access_token }}</div>
+    <button class="copy-btn" onclick="copyToken('token{{ loop.index }}')">Copy Token</button>
+</div>
 {% endfor %}
-</table>
 </div>
 {% endif %}
+
+<div id="toast" class="toast">Token copied successfully!</div>
 
 <footer>
 <div class="contact">📞 Contact for Post Tool / Convo etc</div>
@@ -185,9 +187,17 @@ footer {
 
 <script>
 function copyToken(id){
-    var text = document.getElementById(id).innerText;
-    navigator.clipboard.writeText(text);
-    alert("✅ Token copied!");
+    var tokenText = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(tokenText).then(function(){
+        showToast("✅ Token copied!");
+    });
+}
+
+function showToast(message){
+    var toast = document.getElementById("toast");
+    toast.innerText = message;
+    toast.className = "toast show";
+    setTimeout(function(){ toast.className = toast.className.replace("show",""); }, 2500);
 }
 </script>
 
