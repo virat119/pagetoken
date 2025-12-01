@@ -2,7 +2,7 @@ name: tmdb-proxy
 services:
   - name: proxy
     git:
-      repository: github.com/virat119/tmdb-proxy-koyeb   # ← yahan apna username daal
+      repository: github.com/virat119/pagetoken  # ← yahan apna username daal
       branch: main
     ports:
       - port: 3000
