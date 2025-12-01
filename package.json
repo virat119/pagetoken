@@ -1,11 +1,11 @@
-{
-  "name": "tmdb-proxy",
-  "version": "1.0.0",
-  "main": "index.js",  <-- यह जोड़ें
-  "scripts": {         <-- यह सेक्शन जोड़ें
-    "start": "node index.js"
-  },
-  "dependencies": {
-    "axios": "^1.7.0"
-  }
-}
+1: {
+2:   "name": "tmdb-proxy",
+3:   "version": "1.0.0",
+4:   "main": "index.js",  <-- Buildpack ने इसी लाइन के आसपास एरर बताया था
+5:   "scripts": {
+6:     "start": "node index.js"
+7:   },
+8:   "dependencies": {
+9:     "axios": "^1.7.0"
+10:   }
+11: }
