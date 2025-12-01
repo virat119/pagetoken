@@ -1,0 +1,15 @@
+name: tmdb-proxy
+services:
+  - name: proxy
+    git:
+      repository: github.com/virat119/tmdb-proxy-koyeb   # ← yahan apna username daal
+      branch: main
+    ports:
+      - port: 3000
+    envs:
+      - key: TMDB_KEY
+        value: 20cb24189ce4f0a559576f52d344a825   # ← tera API key
+    build:
+      command: npm install && npm run build   # optional
+    run:
+      command: node index.js
